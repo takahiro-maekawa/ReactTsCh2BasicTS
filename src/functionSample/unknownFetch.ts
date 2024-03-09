@@ -4,23 +4,19 @@ export function unknownFetch() {
     fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?name=Dark%20Magician")
     .then((response) => response.json())
     .then((data: unknown) => {
-        console.log(data);
-        // このif文中においては dataはdataというプロパティを持っているものとみなされる
         if(containsData(data)){ 
-            return data.data;
+            return data.data; // dataプロパティのみを抽出
         }
         return null;
     })
-    .then((data: unknown) => {
-        console.log(data)
-        if (isList(data)){
+    .then((data: unknown) => { //
+        if (isList(data)){ 
             return data[0];
         }
         return null;
     }
     )
     .then((data: unknown) => {
-        console.log(data);
         if (isCharacter(data)){
             console.log("name", data.name);
             return null;
@@ -29,20 +25,23 @@ export function unknownFetch() {
     });
 }
 
-function containsData( // 実際にdataを持っていれば、dataを持つオブジェクトとみなす
+/** 実際にdataを持っていれば、dataを持つオブジェクトとみなす*/
+function containsData( 
     value: any
     ):
     value is {data: any}{
         return "data" in value;
     }
 
-function isList( // Array型と判定できれば、Array型とみなす
+/** Array型と判定できれば、Array型とみなす*/
+function isList(
     value: any
     ):
     value is Array<any> {
         return Array.isArray(value); 
     }
 
+/** 実際にnameを持っていれば、nameを持つオブジェクトとみなす*/
 function isCharacter(
     character: any
     ):
