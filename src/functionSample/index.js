@@ -12,3 +12,4 @@ console.log(calculateTotalPrice(info));
 console.log("fetch sample");
 unknownFetch();
 // ルートディレクトリでts-node --esm src/functionSample/index.jsで実行できます
+//  npx tsx src/functionSample/index.js
