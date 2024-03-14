@@ -1,15 +1,14 @@
-export function unknownFetch() {
-    
+export async function unknownFetch() {
     // yugioh APIからデータを取得
-    fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?name=Dark%20Magician")
-    .then((response) => response.json())
-    .then((data: unknown) => {
+    const response = await fetch("https://db.ygoprodeck.com/api/v7/cardinfo.php?name=Arc%20Rebellion%20Xyz%20Dragon");
+
+    return response.json().then((data: unknown) => {
         if(containsData(data)){ 
             return data.data; // dataプロパティのみを抽出
         }
         return null;
     })
-    .then((data: unknown) => { //
+    .then((data: unknown) => {
         if (isList(data)){ 
             return data[0];
         }
@@ -17,11 +16,10 @@ export function unknownFetch() {
     }
     )
     .then((data: unknown) => {
-        if (isCharacter(data)){
-            console.log("name", data.name);
-            return null;
+        if (hasName(data)){
+            return data;
         };
-        console.log("Failed");
+        return null;
     });
 }
 
@@ -42,9 +40,9 @@ function isList(
     }
 
 /** 実際にnameを持っていれば、nameを持つオブジェクトとみなす*/
-function isCharacter(
-    character: any
-    ):
-    character is {name: string} {
-        return "name" in character; // characterがnameプロパティを持っているか
+function hasName(
+    value: any
+    ): 
+    value is {name: any} {
+        return value !== null && "name" in value; // valueがnameプロパティを持っているか
     } 
